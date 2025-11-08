@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { AppUser, FacultyProfile, StudentProfile, UserRole } from '../types';
+// FIX: Import the arrays of users for authentication.
 import { MOCK_STUDENTS, MOCK_FACULTY } from '../constants';
 
 interface AuthContextType {
@@ -29,17 +30,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
+    // FIX: Updated login logic to iterate over the mock data arrays.
     const login = (role: UserRole, id: string, password?: string): boolean => {
         let foundUser: StudentProfile | FacultyProfile | undefined;
 
         if (role === UserRole.STUDENT) {
             foundUser = MOCK_STUDENTS.find(student => student.usn.toLowerCase() === id.toLowerCase());
         } else if (role === UserRole.FACULTY) {
-            foundUser = MOCK_FACULTY.find(faculty => faculty.teacherId.toLowerCase() === id.toLowerCase() && faculty.password === password);
+            foundUser = MOCK_FACULTY.find(
+                faculty => faculty.teacherId.toLowerCase() === id.toLowerCase() && password === faculty.password
+            );
         }
 
         if (foundUser) {
-            // Ensure we create a fresh object without the password for security/consistency
             const userToStore = { ...foundUser };
             if ('password' in userToStore) {
                 delete userToStore.password;
@@ -56,7 +59,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const logout = () => {
         setUser(null);
         localStorage.removeItem('lms-user');
-        // Optionally navigate to login page
         window.location.href = '/login';
     };
 

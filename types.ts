@@ -18,11 +18,10 @@ export interface StudentProfile extends AppUser {
     course: string;
     batch: string;
     semester: string;
-    // Optional data that may not exist for all students from the new dataset
-    cgpaData?: CgpaData[];
-    attendance?: number;
-    assessments?: InternalAssessment[];
-    cgpa?: number;
+    cgpa: number;
+    attendance: number;
+    cgpaData: CgpaData[];
+    assessments: InternalAssessment[];
 }
 
 export interface Subject {
