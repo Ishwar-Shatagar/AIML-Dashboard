@@ -1,37 +1,48 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { CgpaData } from '../../types';
+import Card from '../ui/Card';
 
 interface CgpaChartProps {
-    data: CgpaData[];
+    cgpa: number;
 }
 
-const CgpaChart: React.FC<CgpaChartProps> = ({ data }) => {
+const CgpaChart: React.FC<CgpaChartProps> = ({ cgpa }) => {
+    const percentage = (cgpa / 10) * 100;
+    const circumference = 2 * Math.PI * 45;
+    const offset = circumference - (percentage / 100) * circumference;
+
     return (
-        <ResponsiveContainer width="100%" height={250}>
-            <AreaChart
-                data={data}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-            >
-                <defs>
-                    <linearGradient id="colorCgpa" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
-                    </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                <XAxis dataKey="semester" tick={{fontSize: 12, fill: '#6B7280'}} axisLine={false} tickLine={false} />
-                <YAxis domain={[7.5, 9.5]} tick={{fontSize: 12, fill: '#6B7280'}} axisLine={false} tickLine={false} />
-                <Tooltip 
-                    contentStyle={{
-                        borderRadius: '0.75rem',
-                        borderColor: '#E5E7EB',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-                    }}
-                />
-                <Area type="monotone" dataKey="cgpa" stroke="#8B5CF6" fillOpacity={1} fill="url(#colorCgpa)" strokeWidth={3} activeDot={{ r: 8 }} />
-            </AreaChart>
-        </ResponsiveContainer>
+        <Card className="flex flex-col items-center justify-center p-6">
+            <div className="relative w-40 h-40">
+                <svg className="w-full h-full" viewBox="0 0 100 100">
+                    <circle
+                        className="text-gray-200"
+                        strokeWidth="10"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                    />
+                    <circle
+                        className="text-primary"
+                        strokeWidth="10"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                        transform="rotate(-90 50 50)"
+                    />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-3xl font-bold text-dark">{cgpa.toFixed(2)}</span>
+                    <span className="text-sm text-gray-500">CGPA</span>
+                </div>
+            </div>
+        </Card>
     );
 };
 

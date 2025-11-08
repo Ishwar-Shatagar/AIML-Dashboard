@@ -1,78 +1,64 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppUser, FacultyProfile, StudentProfile, UserRole } from '../types';
-// FIX: Import the arrays of users for authentication.
+// FIX: Implementing useAuth hook and AuthProvider.
+import React, 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, UserRole, StudentProfile, FacultyProfile } from '../types';
 import { MOCK_STUDENTS, MOCK_FACULTY } from '../constants';
 
-interface AuthContextType {
-    user: AppUser | null;
+type AuthContextType = {
+    user: User | null;
     loading: boolean;
-    login: (role: UserRole, id: string, password?: string) => boolean;
+    login: (email: string, role: UserRole) => Promise<void>;
     logout: () => void;
-    updateUserAvatar: (avatarUrl: string) => void;
-}
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<AppUser | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         try {
-            const storedUser = localStorage.getItem('lms-user');
+            const storedUser = localStorage.getItem('user');
             if (storedUser) {
                 setUser(JSON.parse(storedUser));
             }
         } catch (error) {
             console.error("Failed to parse user from localStorage", error);
-            localStorage.removeItem('lms-user');
         } finally {
             setLoading(false);
         }
     }, []);
 
-    const login = (role: UserRole, id: string, password?: string): boolean => {
+    const login = async (email: string, role: UserRole) => {
+        setLoading(true);
+        // Simulate API call
+        await new Promise(res => setTimeout(res, 500));
+        
         let foundUser: StudentProfile | FacultyProfile | undefined;
 
         if (role === UserRole.STUDENT) {
-            foundUser = MOCK_STUDENTS.find(student => student.usn.toLowerCase() === id.toLowerCase());
-        } else if (role === UserRole.FACULTY) {
-            foundUser = MOCK_FACULTY.find(
-                faculty => faculty.teacherId.toLowerCase() === id.toLowerCase() && password === faculty.password
-            );
+            foundUser = MOCK_STUDENTS.find(u => u.email.toLowerCase() === email.toLowerCase());
+        } else {
+            foundUser = MOCK_FACULTY.find(u => u.email.toLowerCase() === email.toLowerCase());
         }
-
+        
         if (foundUser) {
-            const userToStore = { ...foundUser };
-            if ('password' in userToStore) {
-                delete userToStore.password;
-            }
-
-            setUser(userToStore);
-            localStorage.setItem('lms-user', JSON.stringify(userToStore));
-            return true;
+            setUser(foundUser);
+            localStorage.setItem('user', JSON.stringify(foundUser));
+        } else {
+            throw new Error('User not found');
         }
-
-        return false;
+        setLoading(false);
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('lms-user');
-        window.location.href = '/login';
+        localStorage.removeItem('user');
     };
-
-    const updateUserAvatar = (avatarUrl: string) => {
-        if (user) {
-            const updatedUser = { ...user, avatar: avatarUrl };
-            setUser(updatedUser);
-            localStorage.setItem('lms-user', JSON.stringify(updatedUser));
-        }
-    };
-
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, updateUserAvatar }}>
+        <AuthContext.Provider value={{ user, loading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

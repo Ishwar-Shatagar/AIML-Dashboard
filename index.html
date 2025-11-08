@@ -2,52 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>College LMS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
-            colors: {
-              'primary': {
-                DEFAULT: '#8B5CF6', // A softer purple
-                light: '#C4B5FD',
-                dark: '#6D28D9',
-              },
-              'secondary': '#10B981', 
-              'accent': '#F59E0B', // A vibrant amber
-              'light': '#F9FAFB', // Very light gray background
-              'dark': '#1F2937', 
-              'brand-primary': '#4F46E5',
-              'brand-light': '#EEF2FF',
-              'text-main': '#374151',
-              'text-light': '#6B7280',
-            }
-          }
-        }
-      }
-    </script>
-<script type="importmap">
+    <title>AIML Dashboard</title>
+    
+    <!-- Import Map for JS modules -->
+    <script type="importmap">
 {
   "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.3.0",
     "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.5",
     "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
   }
 }
 </script>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#4F46E5',
+              'primary-dark': '#4338CA',
+              'secondary': '#10B981',
+              'accent': '#F59E0B',
+              'light': '#F3F4F6',
+              'dark': '#1F2937',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
-<body class="bg-light text-text-main">
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

@@ -1,53 +1,46 @@
 import React from 'react';
-import { AppUser, UserRole, StudentProfile, FacultyProfile } from '../types';
+import { useAuth } from '../hooks/useAuth';
+import { StudentProfile, FacultyProfile, UserRole } from '../types';
+import Card from './ui/Card';
 
-interface ProfileCardProps {
-    user: AppUser;
-}
+const ProfileCard: React.FC = () => {
+    const { user } = useAuth();
+    if (!user) return null;
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
+    const isStudent = user.role === UserRole.STUDENT;
+    const profile = user as StudentProfile | FacultyProfile;
+
     return (
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center space-x-4">
-                <img 
-                    src={user.avatar} 
-                    alt={user.name}
-                    className="w-16 h-16 rounded-full border-4 border-primary/20"
-                />
-                <div>
-                    <h2 className="text-xl font-bold text-dark">{user.name}</h2>
-                    <p className="text-sm text-gray-500 capitalize">{user.role}</p>
+        <Card>
+            <div className="flex flex-col items-center text-center p-6">
+                <img className="w-24 h-24 rounded-full mb-4 object-cover" src={profile.avatar} alt={profile.name} />
+                <h2 className="text-xl font-bold text-dark">{profile.name}</h2>
+                <p className="text-sm text-gray-500">{isStudent ? (profile as StudentProfile).usn : (profile as FacultyProfile).department}</p>
+                <div className="mt-4 border-t w-full pt-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                        <span className="font-semibold text-gray-600">Email:</span>
+                        <span className="text-gray-800">{profile.email}</span>
+                    </div>
+                     <div className="flex justify-between">
+                        <span className="font-semibold text-gray-600">Phone:</span>
+                        <span className="text-gray-800">{profile.phone}</span>
+                    </div>
+                    {isStudent && (
+                        <>
+                            <div className="flex justify-between">
+                                <span className="font-semibold text-gray-600">Branch:</span>
+                                <span className="text-gray-800">{(profile as StudentProfile).branch}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="font-semibold text-gray-600">Semester:</span>
+                                <span className="text-gray-800">{(profile as StudentProfile).semester}</span>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
-            
-            <div className="mt-6 text-left space-y-4">
-                 <div className="flex items-center text-sm">
-                    <MailIcon />
-                    <span className="ml-3 text-gray-600">
-                      {(user as StudentProfile).usn || (user as FacultyProfile).teacherId}@bldeacet.ac.in
-                    </span>
-                </div>
-                {user.role === UserRole.STUDENT && (
-                     <div className="flex items-center text-sm">
-                        <AcademicCapIcon />
-                        <span className="ml-3 text-gray-600">{(user as StudentProfile).course}</span>
-                    </div>
-                )}
-                 {user.role === UserRole.FACULTY && (
-                     <div className="flex items-center text-sm">
-                        <OfficeBuildingIcon />
-                        <span className="ml-3 text-gray-600">Faculty of Engineering</span>
-                    </div>
-                )}
-            </div>
-        </div>
+        </Card>
     );
 };
-
-// SVG Icons for ProfileCard
-const MailIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>;
-const AcademicCapIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zM12 14v6m-4-3h8" /></svg>;
-const OfficeBuildingIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>;
-
 
 export default ProfileCard;

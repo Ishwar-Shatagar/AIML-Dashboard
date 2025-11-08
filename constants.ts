@@ -1,140 +1,144 @@
-// constants.ts: Provides all mock data for the application.
-import { StudentProfile, FacultyProfile, UserRole, UpcomingEvent, Course, Assignment, Submission, Notification, TeacherFeedback, TimetableData, InternalAssessment, Activity } from './types';
+import { StudentProfile, FacultyProfile, UserRole, UpcomingEvent, Course, Notification, TimetableEntry, Grade, TeacherFeedback, Assignment, Submission, AttendanceRecord } from './types';
 
-const defaultAvatar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iY3VycmVudENvbG9yIiBhcmlhLWhpZGRlbj0idHJ1ZSIgY2xhc3M9ImgiNSB3LTUiPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTIuMjUgMTIuMTI1YzAtNC40MTggMy41ODItOCA4LTguNDE4QTQuMDQ4IDQuMDQ4IDAgMDAxNC41NDYgN2MwIDEuODY2LTEuMjYgMy40MzUtMy4wMTYgMy45MjZhNC4wNDUgNC4wNDUgMCAwMTIuNTEyIDIuNTQ4YzEuNTIzLjQ5NCAyLjYgMS45NTcgMi42IDMuNjYyIDAgMS44NjYtMS4yNiAzLjQzNS0zLjAxNiAzLjkyNnEuMjM1LS4wMjIuNDcxLS4wMjJjNS4yMiAwIDkuNDcyIDQuMjUyIDkuNDcyIDkuNDcycy00LjI1MiA5LjQ3Mi05LjQ3MiA5LjQ3MlM0LjAxOCA1My4zMDYgNC4wMTggNDguMDgzYzAtNS4yMiA0LjI1Mi05LjQ3MiA5LjQ3Mi05LjQ3MnEtLjIzNS4wMjItLjQ3LjAyMmMtMi41MjIgMC00LjU2Ny0yLjA0NS00LjU2Ny00LjU2N3MtMi4wNDUtNC41NjctNC41NjctNC41NjdjLTIuNTIyIDAtNC41NjYgMi4wNDUtNC41NjYgNC41Njd6TTQuMDI4IDIxLjYyNWMwLTMuNTMzIDIuODY1LTYuNDA4IDYuNDA4LTYuNDA4czYuNDA4IDIuODY1IDYuNDA4IDYuNDA4YzAgMy41MzMtMi44NjUgNi40MDgtNi40MDggNi40MDhTNC4wMjggMjUuMTU4IDQuMDI4IDIxLjYyNXoiIGNsaXAtcnVsZT0iZXZlbm9kZCIgLz48L3N2Zz4=';
-
-
-// A single, complete student profile for consistent demos
-export const MOCK_STUDENT_USER: StudentProfile = {
-    id: 'stud_1',
-    name: 'Riya Sharma',
-    usn: '1BL19CS001',
-    role: UserRole.STUDENT,
-    avatar: defaultAvatar,
-    course: 'Computer Science & Engineering',
-    batch: '2020-2024',
-    semester: '7',
-    cgpa: 8.9,
-    attendance: 92,
-    cgpaData: [
-        { semester: 'Sem 1', cgpa: 8.2 },
-        { semester: 'Sem 2', cgpa: 8.5 },
-        { semester: 'Sem 3', cgpa: 8.1 },
-        { semester: 'Sem 4', cgpa: 8.6 },
-        { semester: 'Sem 5', cgpa: 8.9 },
-        { semester: 'Sem 6', cgpa: 9.1 },
-    ],
-    assessments: [
-      { id: 'ia1-ds', subject: 'Data Structures', type: 'Internal Assessment 1', score: 25, maxScore: 30 },
-      { id: 'ia1-algo', subject: 'Algorithms', type: 'Internal Assessment 1', score: 28, maxScore: 30 },
-      { id: 'ia1-db', subject: 'Database Systems', type: 'Internal Assessment 1', score: 22, maxScore: 30 },
-    ],
-    activities: [
-        { name: 'Attentiveness', score: 91, grade: 'A' },
-        { name: 'Punctuality', score: 85, grade: 'B' },
-        { name: 'Neat and Orderly', score: 97, grade: 'A+' },
-        { name: 'Extracurriculars', score: 87, grade: 'B+' },
-    ]
-};
-
-// A single, complete faculty profile
-export const MOCK_FACULTY_USER: FacultyProfile = {
-    id: 'fac_1',
-    name: 'Dr. Anjali Verma',
-    teacherId: 'T001',
-    password: 'password123',
-    role: UserRole.FACULTY,
-    avatar: defaultAvatar,
-    subjects: [
-        { name: 'Data Structures', code: '18CS32', semester: '3' },
-        { name: 'Algorithms', code: '18CS33', semester: '4' },
-    ],
-};
-
-export const MOCK_STUDENTS: StudentProfile[] = [MOCK_STUDENT_USER];
-export const MOCK_FACULTY: FacultyProfile[] = [MOCK_FACULTY_USER];
-
-export const MOCK_CLASSMATES = [
-    { name: 'Taniya Mary', adNo: '4256', date: '02-05-2022', parent: 'Mary Shalin', city: 'Berlin', contact: '7893456780', course: 'Bachelors', avatar: defaultAvatar },
-    { name: 'Stella Martin', adNo: '4257', date: '02-05-2022', parent: 'Martin Jose', city: 'Munich', contact: '8793456780', course: 'Masters', avatar: defaultAvatar },
-    { name: 'Adeno Alex', adNo: '4258', date: '03-05-2022', parent: 'Alex Aju', city: 'Berlin', contact: '8893456780', course: 'Bachelors', avatar: defaultAvatar },
-    { name: 'Mario Tresso', adNo: '4259', date: '03-05-2022', parent: 'Jacob Stalin', city: 'Chemnitz', contact: '9493456780', course: 'Masters', avatar: defaultAvatar },
-    { name: 'Jonnet Ben', adNo: '4260', date: '03-05-2022', parent: 'Ben Alex', city: 'Munich', contact: '9393456780', course: 'Bachelors', avatar: defaultAvatar },
+export const MOCK_STUDENTS: StudentProfile[] = [
+    {
+        id: 's1',
+        name: 'Alice Johnson',
+        email: 'student@test.com',
+        avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+        phone: '123-456-7890',
+        role: UserRole.STUDENT,
+        usn: '1AB19CS001',
+        branch: 'Computer Science',
+        semester: 5,
+        cgpa: 8.75,
+        attendance: 92,
+    },
 ];
 
+export const MOCK_FACULTY: FacultyProfile[] = [
+    {
+        id: 'f1',
+        name: 'Dr. Robert Smith',
+        email: 'faculty@test.com',
+        avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026705d',
+        phone: '987-654-3210',
+        role: UserRole.FACULTY,
+        department: 'Computer Science',
+        title: 'Professor',
+    },
+    {
+        id: 'f2',
+        name: 'Dr. Emily White',
+        email: 'emily.white@test.com',
+        avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026706d',
+        phone: '987-654-3211',
+        role: UserRole.FACULTY,
+        department: 'Computer Science',
+        title: 'Associate Professor',
+    },
+];
 
-// Other Mock Data
 export const MOCK_UPCOMING_EVENTS: UpcomingEvent[] = [
-    { id: 'evt1', title: 'Mid-Term Exams Start', date: '2023-10-25', color: 'bg-red-500' },
-    { id: 'evt2', title: 'Project Submission Deadline', date: '2023-11-15', color: 'bg-blue-500' },
-    { id: 'evt3', title: 'Tech Fest "Innovate 2023"', date: '2023-11-20', color: 'bg-green-500' },
+    { id: 1, title: 'Mid-term Exams', date: '2023-10-15', color: 'bg-red-500' },
+    { id: 2, title: 'Project Submission Deadline', date: '2023-10-20', color: 'bg-yellow-500' },
+    { id: 3, title: 'Tech Fest "Innovate"', date: '2023-10-25', color: 'bg-blue-500' },
 ];
 
 export const MOCK_COURSES: Course[] = [
-    { id: 'cs101', name: 'Data Structures', code: '18CS32', credits: 4, faculty: 'Dr. Robert Smith' },
-    { id: 'cs102', name: 'Algorithms', code: '18CS33', credits: 4, faculty: 'Dr. Robert Smith' },
-    { id: 'cs103', name: 'Database Systems', code: '18CS34', credits: 3, faculty: 'Prof. Emily White' },
-];
-
-export const MOCK_ASSIGNMENTS: Assignment[] = [
-    { id: 'asg1', title: 'Linked List Implementation', courseId: 'cs101', courseName: 'Data Structures', instructions: 'Implement a doubly linked list with insert, delete, and search operations.', dueDate: '2023-11-10', totalPoints: 100 },
-    { id: 'asg2', title: 'Binary Search Tree', courseId: 'cs102', courseName: 'Algorithms', instructions: 'Implement a BST and its traversal methods.', dueDate: '2023-11-18', totalPoints: 100 },
-];
-
-export const MOCK_SUBMISSIONS: Submission[] = [
-    { id: 'sub1', assignmentId: 'asg1', studentName: 'Riya Sharma', studentUsn: '1BL19CS001', studentAvatar: defaultAvatar, submissionDate: '2023-11-09', status: 'Submitted', grade: 90 },
-    { id: 'sub2', assignmentId: 'asg1', studentName: 'Arjun Kumar', studentUsn: '1BL19CS002', studentAvatar: defaultAvatar, submissionDate: '2023-11-11', status: 'Late', grade: 75 },
-    { id: 'sub3', assignmentId: 'asg2', studentName: 'Riya Sharma', studentUsn: '1BL19CS001', studentAvatar: defaultAvatar, submissionDate: '2023-11-17', status: 'Submitted', grade: null },
+    { id: 'cs101', name: 'Data Structures', code: 'CS101', credits: 4, faculty: 'Dr. Robert Smith' },
+    { id: 'cs102', name: 'Algorithms', code: 'CS102', credits: 4, faculty: 'Dr. Emily White' },
+    { id: 'cs103', name: 'Database Systems', code: 'CS103', credits: 3, faculty: 'Dr. Robert Smith' },
 ];
 
 export const MOCK_NOTIFICATIONS: Notification[] = [
-    { id: 1, message: 'New assignment "Linked List Implementation" has been posted for Data Structures.', time: '2 hours ago', read: false },
-    { id: 2, message: 'Your fee payment for this semester is due.', time: '1 day ago', read: false },
-    { id: 3, message: 'Results for Internal Test 1 have been published.', time: '3 days ago', read: true },
+    { id: 1, message: 'Your fee payment is due tomorrow.', time: '1 day ago', read: false },
+    { id: 2, message: 'Results for semester 4 are out.', time: '3 days ago', read: true },
+    { id: 3, message: 'New assignment added for Data Structures.', time: '5 days ago', read: true },
+];
+
+export const MOCK_TIMETABLE: TimetableEntry[] = [
+    {
+        day: 'Monday',
+        periods: [
+            { time: '9:00 - 10:00', subject: 'Data Structures', faculty: 'Dr. Robert Smith' },
+            { time: '10:00 - 11:00', subject: 'Algorithms', faculty: 'Dr. Emily White' },
+            { time: '11:00 - 12:00', subject: 'Database Systems', faculty: 'Dr. Robert Smith' },
+        ]
+    },
+    {
+        day: 'Tuesday',
+        periods: [
+            { time: '10:00 - 11:00', subject: 'Data Structures', faculty: 'Dr. Robert Smith' },
+            { time: '11:00 - 12:00', subject: 'Algorithms', faculty: 'Dr. Emily White' },
+        ]
+    },
+    {
+        day: 'Wednesday',
+        periods: [
+            { time: '9:00 - 10:00', subject: 'Database Systems', faculty: 'Dr. Robert Smith' },
+        ]
+    },
+    {
+        day: 'Thursday',
+        periods: [
+             { time: '9:00 - 10:00', subject: 'Data Structures', faculty: 'Dr. Robert Smith' },
+            { time: '10:00 - 11:00', subject: 'Algorithms', faculty: 'Dr. Emily White' },
+        ]
+    },
+     {
+        day: 'Friday',
+        periods: [
+            { time: '11:00 - 12:00', subject: 'Database Systems', faculty: 'Dr. Robert Smith' },
+        ]
+    },
+];
+
+export const MOCK_GRADES: Grade[] = [
+    { subject: 'Data Structures', subjectCode: 'CS101', internal: 25, external: 65, total: 90, grade: 'S' },
+    { subject: 'Algorithms', subjectCode: 'CS102', internal: 22, external: 60, total: 82, grade: 'A' },
+    { subject: 'Database Systems', subjectCode: 'CS103', internal: 28, external: 68, total: 96, grade: 'S' },
+    { subject: 'Operating Systems', subjectCode: 'CS104', internal: 20, external: 55, total: 75, grade: 'B' },
 ];
 
 export const feedbackQuestions = [
-    'Clarity of explanation',
-    'Pace of teaching',
-    'Engagement with students',
-    'Availability for doubts',
+    'Clarity and understandability of the concepts',
+    'Pace of the lectures',
+    'Engagement and interaction with students',
+    'Quality of course materials and resources',
+    'Fairness of assessments and grading',
 ];
 
 export const MOCK_TEACHER_FEEDBACK: TeacherFeedback[] = [
     {
-        id: 'fb1',
-        teacherName: 'Dr. Anjali Verma',
-        studentUsn: '1BL19CS001',
-        date: '2023-09-15',
+        id: 1,
+        teacherName: 'Dr. Robert Smith',
+        studentUsn: '1AB19CS001',
+        date: '2023-09-28',
         ratings: [
-            { question: 'Clarity of explanation', rating: 5 },
-            { question: 'Pace of teaching', rating: 4 },
-            { question: 'Engagement with students', rating: 5 },
-            { question: 'Availability for doubts', rating: 4 },
+            { question: feedbackQuestions[0], rating: 5 },
+            { question: feedbackQuestions[1], rating: 4 },
+            { question: feedbackQuestions[2], rating: 5 },
+            { question: feedbackQuestions[3], rating: 4 },
+            { question: feedbackQuestions[4], rating: 5 },
         ],
-        comments: 'Excellent teaching style, very clear concepts. The real-world examples are very helpful.'
+        comments: 'Excellent teaching style, very clear explanations.'
     }
 ];
 
-export const MOCK_TIMETABLE: TimetableData = {
-  '7': {
-    Monday: [
-      { time: '9:00-9:55', subject: 'Machine Learning', short: 'ML', teacher: 'Dr. Anjali Verma' },
-      { time: '9:55-10:50', subject: 'Cryptography', short: 'CNS', teacher: 'Prof. S. Kumar' },
-      { time: '11:20-1:10', subject: 'ML Lab', short: 'ML Lab', teacher: 'Dr. Anjali Verma' },
-      { time: '2:15-3:10', subject: 'Web Technologies', short: 'WEB', teacher: 'Prof. R. Singh' },
-      { time: '3:10-4:05', subject: 'Soft Skills', short: 'SS', teacher: 'Mrs. P. Sharma' },
-    ],
-    Tuesday: [
-      { time: '9:00-9:55', subject: 'Web Technologies', short: 'WEB', teacher: 'Prof. R. Singh' },
-      { time: '9:55-10:50', subject: 'Machine Learning', short: 'ML', teacher: 'Dr. Anjali Verma' },
-      { time: '11:20-1:10', subject: 'Web Lab', short: 'WEB Lab', teacher: 'Prof. R. Singh' },
-      { time: '2:15-3:10', subject: 'Cryptography', short: 'CNS', teacher: 'Prof. S. Kumar' },
-    ],
-     Wednesday: [
-      { time: '9:55-10:50', subject: 'Cryptography', short: 'CNS', teacher: 'Prof. S. Kumar' },
-      { time: '11:20-12:15', subject: 'Machine Learning', short: 'ML', teacher: 'Dr. Anjali Verma' },
-    ],
-    // ... other days
-  },
-};
+export const MOCK_ASSIGNMENTS: Assignment[] = [
+    { id: 'as1', title: 'Implement Binary Search Tree', courseName: 'Data Structures', dueDate: '2023-10-20', totalPoints: 100, description: '...' },
+    { id: 'as2', title: 'Complexity Analysis', courseName: 'Algorithms', dueDate: '2023-10-22', totalPoints: 50, description: '...' },
+];
+
+export const MOCK_SUBMISSIONS: Submission[] = [
+    { id: 'sub1', assignmentId: 'as1', studentName: 'Alice Johnson', studentUsn: '1AB19CS001', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', submissionDate: '2023-10-19', status: 'Submitted', grade: 95 },
+    { id: 'sub2', assignmentId: 'as1', studentName: 'Bob Williams', studentUsn: '1AB19CS002', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026702d', submissionDate: '2023-10-21', status: 'Late', grade: 80 },
+    { id: 'sub3', assignmentId: 'as1', studentName: 'Charlie Brown', studentUsn: '1AB19CS003', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026703d', submissionDate: '', status: 'Not Submitted', grade: null },
+];
+
+export const MOCK_ATTENDANCE: AttendanceRecord[] = [
+    { subject: 'Data Structures', subjectCode: 'CS101', attended: 28, total: 30 },
+    { subject: 'Algorithms', subjectCode: 'CS102', attended: 25, total: 30 },
+    { subject: 'Database Systems', subjectCode: 'CS103', attended: 29, total: 30 },
+];

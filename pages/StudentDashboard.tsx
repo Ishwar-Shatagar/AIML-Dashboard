@@ -2,122 +2,71 @@ import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { StudentProfile } from '../types';
 import Card from '../components/ui/Card';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { MOCK_CLASSMATES } from '../constants';
+import CgpaChart from '../components/charts/CgpaChart';
+import ScoreDonutChart from '../components/charts/ScoreDonutChart';
+import UpcomingEvents from '../components/UpcomingEvents';
+import CalendarCard from '../components/CalendarCard';
+import { MOCK_UPCOMING_EVENTS, MOCK_GRADES } from '../constants';
 
-const StatsChart = () => {
-    const data = [
-      { name: 'Jan', progress: 60, average: 50 },
-      { name: 'Feb', progress: 65, average: 55 },
-      { name: 'Mar', progress: 70, average: 60 },
-      { name: 'Apr', progress: 68, average: 62 },
-      { name: 'May', progress: 75, average: 65 },
-      { name: 'Jun', progress: 80, average: 70 },
-      { name: 'Jul', progress: 82, average: 75 },
-      { name: 'Aug', progress: 85, average: 78 },
-      { name: 'Sep', progress: 88, average: 80 },
-    ];
-    return (
-        <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={data} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
-                <defs>
-                    <linearGradient id="colorProgress" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.4}/>
-                        <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorAverage" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.4}/>
-                        <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
-                    </linearGradient>
-                </defs>
-                <Tooltip />
-                <XAxis dataKey="name" tick={{fontSize: 12}} />
-                <YAxis tick={{fontSize: 12}} />
-                <Area type="monotone" dataKey="progress" stroke="#8B5CF6" strokeWidth={2} fill="url(#colorProgress)" />
-                <Area type="monotone" dataKey="average" stroke="#10B981" strokeWidth={2} fill="url(#colorAverage)" />
-            </AreaChart>
-        </ResponsiveContainer>
-    );
-}
-
-const ActivityChart = () => {
-    const data = [
-        { name: 'Class', value: 400 },
-        { name: 'Exam', value: 300 },
-        { name: 'Assignment', value: 300 },
-        { name: 'Judgement', value: 200 },
-    ];
-    const COLORS = ['#F59E0B', '#10B981', '#8B5CF6', '#EF4444'];
-    return (
-        <div className="w-full h-48 relative">
-            <ResponsiveContainer>
-                <PieChart>
-                    <Pie data={data} cx="50%" cy="50%" innerRadius="60%" outerRadius="80%" fill="#8884d8" paddingAngle={5} dataKey="value">
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                 <span className="text-5xl font-extrabold text-dark">80%</span>
-            </div>
+const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactNode }> = ({ title, value, icon }) => (
+    <Card className="p-6 flex items-center">
+        <div className="p-3 rounded-full bg-primary/10 text-primary mr-4">
+            {icon}
         </div>
-    )
-}
-
+        <div>
+            <p className="text-sm text-gray-500">{title}</p>
+            <p className="text-2xl font-bold text-dark">{value}</p>
+        </div>
+    </Card>
+);
 
 const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
     const student = user as StudentProfile;
 
-    if (!student || student.role !== 'student') {
-        return <div>Loading student data...</div>;
-    }
-
     return (
-        <div className="space-y-8">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-text-main">Student Dashboard</h1>
-                <input type="text" placeholder="Search..." className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+        <div className="space-y-6">
+            <div>
+                <h1 className="text-3xl font-bold text-dark">Welcome, {student.name.split(' ')[0]}!</h1>
+                <p className="text-gray-500">Here's your academic and activity overview.</p>
             </div>
             
-            <Card className="!p-0 overflow-hidden">
-                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                        <thead className="text-xs text-text-light uppercase bg-light">
-                            <tr>
-                                {['Name', 'Ad.no', 'Date', 'Parent Name', 'City', 'Contact', 'Course', 'Action'].map(h => <th key={h} className="px-6 py-3">{h}</th>)}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {MOCK_CLASSMATES.map((s, i) => (
-                                <tr key={i}>
-                                    <td className="px-6 py-4 font-semibold flex items-center"><img src={s.avatar} alt={s.name} className="w-8 h-8 rounded-full mr-3" />{s.name}</td>
-                                    <td className="px-6 py-4">{s.adNo}</td>
-                                    <td className="px-6 py-4">{s.date}</td>
-                                    <td className="px-6 py-4">{s.parent}</td>
-                                    <td className="px-6 py-4">{s.city}</td>
-                                    <td className="px-6 py-4">{s.contact}</td>
-                                    <td className="px-6 py-4">{s.course}</td>
-                                    <td className="px-6 py-4">...</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard title="Overall Attendance" value={`${student.attendance}%`} icon={<CheckCircleIcon />} />
+                <StatCard title="Courses Enrolled" value={MOCK_GRADES.length} icon={<BookOpenIcon />} />
+                <StatCard title="Pending Assignments" value="2" icon={<ClipboardListIcon />} />
+                <StatCard title="Exams Scheduled" value="3" icon={<CalendarIcon />} />
+            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <Card title="Statistics" className="lg:col-span-3">
-                    <StatsChart />
-                </Card>
-                 <Card title="Activities" className="lg:col-span-2">
-                    <ActivityChart />
-                </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                    <Card title="Recent Grades">
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            {MOCK_GRADES.slice(0, 3).map(grade => (
+                                <ScoreDonutChart key={grade.subjectCode} score={grade.total} maxScore={100} title={grade.subject} />
+                            ))}
+                        </div>
+                    </Card>
+                </div>
+                <div className="space-y-6">
+                    <CgpaChart cgpa={student.cgpa} />
+                    <UpcomingEvents events={MOCK_UPCOMING_EVENTS} />
+                </div>
+            </div>
+            
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <CalendarCard events={MOCK_UPCOMING_EVENTS} />
+                </div>
             </div>
         </div>
     );
 };
+
+// Icons
+const CheckCircleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const BookOpenIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>;
+const ClipboardListIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>;
+const CalendarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
 
 export default StudentDashboard;

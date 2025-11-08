@@ -1,74 +1,37 @@
-// types.ts: Defines all shared data structures for the application.
-
 export enum UserRole {
     STUDENT = 'student',
     FACULTY = 'faculty',
 }
 
-export interface AppUser {
+export interface User {
     id: string;
     name: string;
-    role: UserRole;
+    email: string;
     avatar: string;
+    phone: string;
+    role: UserRole;
 }
 
-export interface Activity {
-    name: string;
-    score: number;
-    grade: string;
-}
-
-export interface StudentProfile extends AppUser {
+export interface StudentProfile extends User {
     role: UserRole.STUDENT;
     usn: string;
-    course: string;
-    batch: string;
-    semester: string;
+    branch: string;
+    semester: number;
     cgpa: number;
     attendance: number;
-    cgpaData: CgpaData[];
-    assessments: InternalAssessment[];
-    activities: Activity[];
 }
 
-export interface Subject {
-    code: string;
-    name: string;
-    semester: string;
-}
-
-export interface FacultyProfile extends AppUser {
+export interface FacultyProfile extends User {
     role: UserRole.FACULTY;
-    teacherId: string;
-    password?: string;
-    subjects: Subject[];
+    department: string;
+    title: string;
 }
 
 export interface UpcomingEvent {
-    id: string;
+    id: number;
     title: string;
     date: string;
     color: string;
-}
-
-export interface CgpaData {
-    semester: string;
-    cgpa: number;
-}
-
-export interface Notification {
-    id: number;
-    message: string;
-    time: string;
-    read: boolean;
-}
-
-export interface InternalAssessment {
-    id: string;
-    subject: string;
-    type: string;
-    score: number;
-    maxScore: number;
 }
 
 export interface Course {
@@ -79,14 +42,54 @@ export interface Course {
     faculty: string;
 }
 
+export interface Notification {
+    id: number;
+    message: string;
+    time: string;
+    read: boolean;
+}
+
+export interface Period {
+    subject: string;
+    faculty: string;
+    time: string;
+}
+
+export interface TimetableEntry {
+    day: string;
+    periods: Period[];
+}
+
+export interface Grade {
+    subject: string;
+    subjectCode: string;
+    internal: number;
+    external: number;
+    total: number;
+    grade: string;
+}
+
+export interface FeedbackRating {
+    question: string;
+    rating: number;
+}
+
+export interface TeacherFeedback {
+    id: number;
+    teacherName: string;
+    studentUsn: string;
+    date: string;
+    ratings: FeedbackRating[];
+    comments: string;
+}
+
 export interface Assignment {
     id: string;
     title: string;
-    courseId: string;
     courseName: string;
-    instructions: string;
     dueDate: string;
     totalPoints: number;
+    description: string;
 }
 
 export interface Submission {
@@ -100,26 +103,9 @@ export interface Submission {
     grade: number | null;
 }
 
-export interface TeacherFeedback {
-  id: string;
-  teacherName: string;
-  studentUsn: string;
-  date: string;
-  ratings: { question: string; rating: number }[];
-  comments: string;
-}
-
-export interface TimetableEntry {
-    time: string;
+export interface AttendanceRecord {
     subject: string;
-    short: string;
-    teacher: string;
-}
-
-export interface DailySchedule {
-    [day: string]: TimetableEntry[];
-}
-
-export interface TimetableData {
-    [semester: string]: DailySchedule;
+    subjectCode: string;
+    attended: number;
+    total: number;
 }
