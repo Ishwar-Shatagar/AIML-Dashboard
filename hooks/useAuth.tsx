@@ -8,6 +8,7 @@ interface AuthContextType {
     loading: boolean;
     login: (role: UserRole, id: string, password?: string) => boolean;
     logout: () => void;
+    updateUserAvatar: (avatarUrl: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,7 +31,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
-    // FIX: Updated login logic to iterate over the mock data arrays.
     const login = (role: UserRole, id: string, password?: string): boolean => {
         let foundUser: StudentProfile | FacultyProfile | undefined;
 
@@ -62,8 +62,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         window.location.href = '/login';
     };
 
+    const updateUserAvatar = (avatarUrl: string) => {
+        if (user) {
+            const updatedUser = { ...user, avatar: avatarUrl };
+            setUser(updatedUser);
+            localStorage.setItem('lms-user', JSON.stringify(updatedUser));
+        }
+    };
+
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, updateUserAvatar }}>
             {children}
         </AuthContext.Provider>
     );

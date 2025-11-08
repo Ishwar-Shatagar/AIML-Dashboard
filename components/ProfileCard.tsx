@@ -7,32 +7,36 @@ interface ProfileCardProps {
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
     return (
-        <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
-            <img 
-                src={user.avatar} 
-                alt={user.name}
-                className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary/20"
-            />
-            <h2 className="text-xl font-bold text-dark">{user.name}</h2>
-            <p className="text-sm text-gray-500 capitalize">{user.role}</p>
-
-            <div className="mt-6 text-left space-y-3">
+        <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center space-x-4">
+                <img 
+                    src={user.avatar} 
+                    alt={user.name}
+                    className="w-16 h-16 rounded-full border-4 border-primary/20"
+                />
+                <div>
+                    <h2 className="text-xl font-bold text-dark">{user.name}</h2>
+                    <p className="text-sm text-gray-500 capitalize">{user.role}</p>
+                </div>
+            </div>
+            
+            <div className="mt-6 text-left space-y-4">
                  <div className="flex items-center text-sm">
                     <MailIcon />
-                    <span className="ml-2 text-gray-600">
+                    <span className="ml-3 text-gray-600">
                       {(user as StudentProfile).usn || (user as FacultyProfile).teacherId}@bldeacet.ac.in
                     </span>
                 </div>
                 {user.role === UserRole.STUDENT && (
                      <div className="flex items-center text-sm">
                         <AcademicCapIcon />
-                        <span className="ml-2 text-gray-600">{(user as StudentProfile).course}</span>
+                        <span className="ml-3 text-gray-600">{(user as StudentProfile).course}</span>
                     </div>
                 )}
                  {user.role === UserRole.FACULTY && (
                      <div className="flex items-center text-sm">
                         <OfficeBuildingIcon />
-                        <span className="ml-2 text-gray-600">Faculty</span>
+                        <span className="ml-3 text-gray-600">Faculty of Engineering</span>
                     </div>
                 )}
             </div>

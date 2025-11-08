@@ -19,6 +19,7 @@ import PlaceholderPage from './pages/PlaceholderPage';
 import NotFound from './pages/NotFound';
 import { UserRole } from './types';
 import FacultyFeedbackView from './pages/FacultyFeedbackView';
+import ManageProfile from './pages/ManageProfile';
 
 const ProtectedRoute: React.FC<{ allowedRoles: UserRole[] }> = ({ allowedRoles }) => {
     const { user, loading } = useAuth();
@@ -60,6 +61,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="student/timetable" element={<Timetable />} />
                 <Route path="student/chat" element={<Chat />} />
                 <Route path="student/feedback" element={<Feedback />} />
+                <Route path="student/manage" element={<ManageProfile />} />
             </Route>
 
             {/* Faculty Routes */}
@@ -73,6 +75,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="faculty/reports" element={<PlaceholderPage title="Reports" />} />
                 <Route path="faculty/chat" element={<Chat />} />
                 <Route path="faculty/feedback" element={<FacultyFeedbackView />} />
+                <Route path="faculty/manage" element={<ManageProfile />} />
             </Route>
             
             <Route path="/" element={<Navigate to={defaultRoute} replace />} />

@@ -12,6 +12,12 @@ export interface AppUser {
     avatar: string;
 }
 
+export interface Activity {
+    name: string;
+    score: number;
+    grade: string;
+}
+
 export interface StudentProfile extends AppUser {
     role: UserRole.STUDENT;
     usn: string;
@@ -22,6 +28,7 @@ export interface StudentProfile extends AppUser {
     attendance: number;
     cgpaData: CgpaData[];
     assessments: InternalAssessment[];
+    activities: Activity[];
 }
 
 export interface Subject {

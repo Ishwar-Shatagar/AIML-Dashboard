@@ -1,75 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { UserRole } from '../types';
 
 // Icons
-const HomeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>;
-const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
-const BookOpenIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>;
-const CalendarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
-const ChatIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>;
-const PencilAltIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>;
-const UsersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm6-11a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
-const LibraryIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>;
-const DocumentTextIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
-const DocumentAddIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
-const ChartBarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>;
-const LogoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
-
-
-const studentLinks = [
-    { to: '/student', text: 'Dashboard', icon: <HomeIcon /> },
-    { to: '/student/info', text: 'My Profile', icon: <UserIcon /> },
-    { to: '/student/gradebook', text: 'Gradebook', icon: <BookOpenIcon /> },
-    { to: '/student/timetable', text: 'Timetable', icon: <CalendarIcon /> },
-    { to: '/student/chat', text: 'Chat', icon: <ChatIcon /> },
-    { to: '/student/feedback', text: 'Give Feedback', icon: <PencilAltIcon /> },
-];
-
-const facultyLinks = [
-    { to: '/faculty', text: 'Dashboard', icon: <HomeIcon /> },
-    { to: '/faculty/chat', text: 'Chat', icon: <ChatIcon /> },
-    { to: '/faculty/students', text: 'Students', icon: <UsersIcon /> },
-    { to: '/faculty/courses', text: 'Courses', icon: <LibraryIcon /> },
-    { to: '/faculty/assignments', text: 'Assignments', icon: <DocumentTextIcon /> },
-    { to: '/faculty/exams/create', text: 'Create Exam', icon: <DocumentAddIcon /> },
-    { to: '/faculty/feedback', text: 'View Feedback', icon: <PencilAltIcon /> },
-    { to: '/faculty/reports', text: 'Reports', icon: <ChartBarIcon /> },
-];
+const HomeIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>;
+const UserIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>;
+const ChevronDownIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>;
+const ManagementIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" /></svg>;
+const CogIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-1.007 1.11-1.226M10.343 3.94a2.25 2.25 0 01-2.25 2.25c-.583 0-1.141-.25-1.583-.67M13.657 3.94c-.09.542-.56 1.007-1.11 1.226m1.11-1.226a2.25 2.25 0 002.25 2.25c.583 0 1.141-.25 1.583-.67M5.83 15.242c.12.533.53 1.025.99 1.341m-1.341-1.341a2.25 2.25 0 00-2.25-2.25c-.583 0-1.141.25-1.583.67M18.17 15.242c-.12.533-.53 1.025-.99 1.341m1.341-1.341a2.25 2.25 0 012.25-2.25c.583 0 1.141.25 1.583.67M12 18.333a3.375 3.375 0 100-6.75 3.375 3.375 0 000 6.75zM12 21a8.962 8.962 0 006.363-2.637m-12.727 0A8.962 8.962 0 0012 21z" /></svg>;
+const LogoutIcon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>;
 
 const Sidebar: React.FC = () => {
     const { user, logout } = useAuth();
-    const links = user?.role === UserRole.STUDENT ? studentLinks : facultyLinks;
-    const activeLinkClass = "bg-primary text-white";
-    const inactiveLinkClass = "text-gray-600 hover:bg-primary/10 hover:text-primary";
+    const [isManagementOpen, setManagementOpen] = useState(true);
+
+    const managementSubLinks = [
+        { to: '#', text: 'Admission' },
+        { to: '#', text: 'Course' },
+        { to: '#', text: 'Fees' },
+        { to: '#', text: 'Attendance' },
+        { to: '#', text: 'Online learning' },
+        { to: '/student/timetable', text: 'Timetable' },
+        { to: '#', text: 'Library' },
+        { to: '#', text: 'Examination' },
+        { to: '#', text: 'Assignment' },
+        { to: '#', text: 'Placements' },
+    ];
+
+    const activeLinkClass = "bg-accent/10 text-accent border-r-4 border-accent";
+    const inactiveLinkClass = "text-text-light hover:bg-accent/5";
+    const sublinkInactiveClass = "text-text-light hover:text-accent";
 
     return (
-        <aside className="w-64 bg-white flex-shrink-0 border-r border-gray-200 flex flex-col">
-            <div className="h-20 flex items-center justify-center border-b">
-                <h1 className="text-2xl font-bold text-primary">Ed-Portal</h1>
+        <aside className="w-72 bg-white flex-shrink-0 flex flex-col">
+            <div className="px-8 py-6 text-center border-b">
+                {user && (
+                    <div className="flex flex-col items-center">
+                        <img src={user.avatar} alt={user.name} className="w-20 h-20 rounded-full mb-3" />
+                        <h2 className="text-xl font-bold text-text-main">Hi, {user.name.split(' ')[0]}</h2>
+                    </div>
+                )}
             </div>
-            <nav className="flex-1 px-4 py-6 space-y-2">
-                {links.map(link => (
-                    <NavLink
-                        key={link.to}
-                        to={link.to}
-                        className={({ isActive }) =>
-                            `flex items-center px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`
-                        }
-                    >
-                        {link.icon}
-                        <span className="ml-3">{link.text}</span>
-                    </NavLink>
-                ))}
-            </nav>
-            <div className="p-4 border-t">
-                 <button
-                    onClick={logout}
-                    className="flex items-center w-full px-4 py-3 rounded-lg text-sm font-semibold text-red-500 hover:bg-red-50"
+
+            <nav className="flex-1 px-6 py-4 space-y-2">
+                <NavLink
+                    to={user?.role === UserRole.STUDENT ? '/student' : '/faculty'}
+                    className={({ isActive }) => `flex items-center px-4 py-3 rounded-lg text-md font-semibold transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`}
                 >
-                    <LogoutIcon />
-                    <span className="ml-3">Logout</span>
+                    <HomeIcon className="w-6 h-6 mr-4" />
+                    Dashboard
+                </NavLink>
+
+                <NavLink
+                    to="/student/info" // A generic 'student' page, can be adapted
+                    className={({ isActive }) => `flex items-center px-4 py-3 rounded-lg text-md font-semibold transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`}
+                >
+                    <UserIcon className="w-6 h-6 mr-4" />
+                    Student
+                </NavLink>
+
+                <div>
+                    <button onClick={() => setManagementOpen(!isManagementOpen)} className="flex items-center w-full px-4 py-3 rounded-lg text-md font-semibold text-text-light">
+                        <ManagementIcon className="w-6 h-6 mr-4" />
+                        Management
+                        <ChevronDownIcon className={`w-5 h-5 ml-auto transition-transform ${isManagementOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isManagementOpen && (
+                        <div className="pl-10 mt-2 space-y-1">
+                            {managementSubLinks.map(link => (
+                                <NavLink key={link.text} to={link.to} className={`block py-2 text-md font-medium ${sublinkInactiveClass}`}>{link.text}</NavLink>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                
+                 <NavLink
+                    to={user?.role === UserRole.STUDENT ? '/student/manage' : '/faculty/manage'}
+                    className={({ isActive }) => `flex items-center px-4 py-3 rounded-lg text-md font-semibold transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`}
+                >
+                    <CogIcon className="w-6 h-6 mr-4" />
+                    Manage Profile
+                </NavLink>
+
+
+            </nav>
+            <div className="p-6 border-t">
+                <button
+                    onClick={logout}
+                    className="flex items-center w-full px-4 py-3 rounded-lg text-md font-semibold text-text-light hover:bg-accent/5"
+                >
+                    <LogoutIcon className="w-6 h-6 mr-4" />
+                    Logout
                 </button>
             </div>
         </aside>

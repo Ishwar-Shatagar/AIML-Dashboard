@@ -15,14 +15,19 @@
               sans: ['Inter', 'sans-serif'],
             },
             colors: {
-              'primary': '#7C3AED', // A vibrant purple
-              'primary-dark': '#6D28D9',
-              'secondary': '#10B981', // A teal green
-              'accent': '#F97316', // A bright orange
-              'light': '#F3F4F6', // Light gray background
-              'dark': '#1F2937', // Dark text color
-              'brand-primary': '#4F46E5', // Kept for some icons
+              'primary': {
+                DEFAULT: '#8B5CF6', // A softer purple
+                light: '#C4B5FD',
+                dark: '#6D28D9',
+              },
+              'secondary': '#10B981', 
+              'accent': '#F59E0B', // A vibrant amber
+              'light': '#F9FAFB', // Very light gray background
+              'dark': '#1F2937', 
+              'brand-primary': '#4F46E5',
               'brand-light': '#EEF2FF',
+              'text-main': '#374151',
+              'text-light': '#6B7280',
             }
           }
         }
@@ -42,7 +47,7 @@
 }
 </script>
 </head>
-<body class="bg-light text-dark">
+<body class="bg-light text-text-main">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

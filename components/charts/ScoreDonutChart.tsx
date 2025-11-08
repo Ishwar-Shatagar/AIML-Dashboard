@@ -3,23 +3,15 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface ScoreDonutChartProps {
     score: number;
+    grade: string;
 }
 
-const ScoreDonutChart: React.FC<ScoreDonutChartProps> = ({ score }) => {
+const ScoreDonutChart: React.FC<ScoreDonutChartProps> = ({ score, grade }) => {
     const data = [
         { name: 'Score', value: score },
         { name: 'Remaining', value: 100 - score },
     ];
-    const COLORS = ['#6D28D9', '#E5E7EB'];
-    const percentage = score;
-
-    let grade = 'F';
-    if (percentage >= 90) grade = 'A+';
-    else if (percentage >= 80) grade = 'A';
-    else if (percentage >= 70) grade = 'B+';
-    else if (percentage >= 60) grade = 'B';
-    else if (percentage >= 50) grade = 'C';
-    else grade = 'D';
+    const COLORS = ['#8B5CF6', '#E5E7EB'];
 
     return (
         <div className="w-full h-48 relative">
@@ -44,8 +36,8 @@ const ScoreDonutChart: React.FC<ScoreDonutChartProps> = ({ score }) => {
                 </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                 <span className="text-5xl font-extrabold text-dark">{percentage}%</span>
-                 <span className="text-xl font-bold text-primary">{grade}</span>
+                 <span className="text-5xl font-extrabold text-dark">{score}%</span>
+                 <span className="text-xl font-bold text-primary-dark">{grade}</span>
             </div>
         </div>
     );

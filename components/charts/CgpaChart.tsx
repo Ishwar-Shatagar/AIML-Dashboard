@@ -15,15 +15,21 @@ const CgpaChart: React.FC<CgpaChartProps> = ({ data }) => {
             >
                 <defs>
                     <linearGradient id="colorCgpa" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
                     </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis dataKey="semester" tick={{fontSize: 12}} />
-                <YAxis domain={[7, 10]} tick={{fontSize: 12}} />
-                <Tooltip />
-                <Area type="monotone" dataKey="cgpa" stroke="#6D28D9" fillOpacity={1} fill="url(#colorCgpa)" strokeWidth={3} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                <XAxis dataKey="semester" tick={{fontSize: 12, fill: '#6B7280'}} axisLine={false} tickLine={false} />
+                <YAxis domain={[7.5, 9.5]} tick={{fontSize: 12, fill: '#6B7280'}} axisLine={false} tickLine={false} />
+                <Tooltip 
+                    contentStyle={{
+                        borderRadius: '0.75rem',
+                        borderColor: '#E5E7EB',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                    }}
+                />
+                <Area type="monotone" dataKey="cgpa" stroke="#8B5CF6" fillOpacity={1} fill="url(#colorCgpa)" strokeWidth={3} activeDot={{ r: 8 }} />
             </AreaChart>
         </ResponsiveContainer>
     );
