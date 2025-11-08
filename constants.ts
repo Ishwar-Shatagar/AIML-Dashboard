@@ -1,162 +1,140 @@
-import { StudentProfile, FacultyProfile, UserRole, UpcomingEvent, Notification, TimetableEntry, Course, Assignment, Submission, ChatMessage, TeacherFeedback } from './types';
-
-const mockCgpaHistory = [
-    { semester: 'Sem 1', cgpa: 8.5 },
-    { semester: 'Sem 2', cgpa: 8.8 },
-    { semester: 'Sem 3', cgpa: 9.1 },
-    { semester: 'Sem 4', cgpa: 9.0 },
-    { semester: 'Sem 5', cgpa: 9.3 },
-];
-
-const mockAttendance = [
-    { subject: 'Data Structures', total: 50, attended: 45 },
-    { subject: 'Algorithms', total: 50, attended: 48 },
-    { subject: 'Database Systems', total: 50, attended: 42 },
-    { subject: 'Operating Systems', total: 50, attended: 49 },
-];
-
-const mockAssessments = [
-    { id: 'ia1', subject: 'Data Structures', score: 85, maxScore: 100, type: 'Mid-Term' as const },
-    { id: 'ia2', subject: 'Algorithms', score: 92, maxScore: 100, type: 'Mid-Term' as const },
-    { id: 'ia3', subject: 'Database Systems', score: 78, maxScore: 100, type: 'Mid-Term' as const },
-];
+// constants.ts: Provides all mock data for the application.
+import { StudentProfile, FacultyProfile, UserRole, UpcomingEvent, Course, Assignment, Submission, Notification, TeacherFeedback } from './types';
 
 export const MOCK_STUDENTS: StudentProfile[] = [
     {
+        id: 'stud1',
+        name: 'Alice Johnson',
         role: UserRole.STUDENT,
+        avatar: 'https://i.pravatar.cc/150?u=alice',
         usn: '1BI19CS001',
-        name: 'Alex Johnson',
-        avatar: 'https://i.pravatar.cc/150?u=alex',
         course: 'Computer Science',
-        semester: 6,
         batch: '2019-2023',
-        cgpa: 9.2,
-        cgpaHistory: mockCgpaHistory,
-        attendance: mockAttendance,
-        assessments: mockAssessments,
+        cgpa: 8.75,
+        cgpaData: [
+            { semester: 'S1', cgpa: 8.5 },
+            { semester: 'S2', cgpa: 8.6 },
+            { semester: 'S3', cgpa: 8.9 },
+            { semester: 'S4', cgpa: 8.7 },
+            { semester: 'S5', cgpa: 9.0 },
+            { semester: 'S6', cgpa: 8.8 },
+        ],
+        attendance: 92,
+        assessments: [
+            { id: 'ia1_cs101', subject: 'Data Structures', type: 'Internal Test 1', score: 25, maxScore: 30 },
+            { id: 'ia2_cs101', subject: 'Data Structures', type: 'Internal Test 2', score: 28, maxScore: 30 },
+            { id: 'ia1_cs102', subject: 'Algorithms', type: 'Internal Test 1', score: 22, maxScore: 30 },
+            { id: 'ia2_cs102', subject: 'Algorithms', type: 'Internal Test 2', score: 26, maxScore: 30 },
+            { id: 'ia1_cs103', subject: 'Database Systems', type: 'Internal Test 1', score: 29, maxScore: 30 },
+        ],
     },
     {
+        id: 'stud2',
+        name: 'Bob Brown',
         role: UserRole.STUDENT,
+        avatar: 'https://i.pravatar.cc/150?u=bob',
         usn: '1BI19CS002',
-        name: 'Maria Garcia',
-        avatar: 'https://i.pravatar.cc/150?u=maria',
         course: 'Computer Science',
-        semester: 6,
         batch: '2019-2023',
-        cgpa: 8.9,
-        cgpaHistory: mockCgpaHistory.map(item => ({ ...item, cgpa: item.cgpa - 0.3 })),
-        attendance: mockAttendance.map(item => ({ ...item, attended: item.attended - 2 })),
-        assessments: mockAssessments.map(item => ({...item, score: item.score - 5})),
-    }
+        cgpa: 8.20,
+        cgpaData: [
+             { semester: 'S1', cgpa: 8.1 },
+            { semester: 'S2', cgpa: 8.3 },
+            { semester: 'S3', cgpa: 8.0 },
+            { semester: 'S4', cgpa: 8.2 },
+            { semester: 'S5', cgpa: 8.5 },
+            { semester: 'S6', cgpa: 8.1 },
+        ],
+        attendance: 85,
+        assessments: [
+             { id: 'ia1_cs101_bob', subject: 'Data Structures', type: 'Internal Test 1', score: 22, maxScore: 30 },
+            { id: 'ia2_cs101_bob', subject: 'Data Structures', type: 'Internal Test 2', score: 25, maxScore: 30 },
+        ],
+    },
 ];
 
-export const MOCK_FACULTY: FacultyProfile[] = [
+export const MOCK_FACULTY: (FacultyProfile & { password?: string })[] = [
     {
+        id: 'fac1',
+        name: 'Dr. Robert Smith',
         role: UserRole.FACULTY,
+        avatar: 'https://i.pravatar.cc/150?u=robert',
         teacherId: 'TCS01',
-        name: 'Dr. Evelyn Reed',
-        avatar: 'https://i.pravatar.cc/150?u=evelyn',
+        department: 'Computer Science',
         password: 'password123',
     },
-     {
+    {
+        id: 'fac2',
+        name: 'Prof. Emily White',
         role: UserRole.FACULTY,
+        avatar: 'https://i.pravatar.cc/150?u=emily',
         teacherId: 'TCS02',
-        name: 'Prof. Samuel Green',
-        avatar: 'https://i.pravatar.cc/150?u=samuel',
+        department: 'Computer Science',
         password: 'password123',
-    }
+    },
 ];
 
 export const MOCK_UPCOMING_EVENTS: UpcomingEvent[] = [
-    { id: '1', title: 'Mid-term Exams', date: '2024-08-15', color: 'bg-red-500' },
-    { id: '2', title: 'Project Submission', date: '2024-08-20', color: 'bg-blue-500' },
-    { id: '3', title: 'Tech Fest "Innovate"', date: '2024-09-05', color: 'bg-green-500' },
-];
-
-export const MOCK_NOTIFICATIONS: Notification[] = [
-    { id: '1', message: 'Your fees for the next semester are due.', time: '2 hours ago', read: false },
-    { id: '2', message: 'Results for DSA mid-term are out.', time: '1 day ago', read: false },
-    { id: '3', message: 'Library book "Clean Code" is due for return.', time: '3 days ago', read: true },
-];
-
-export const MOCK_TIMETABLE: TimetableEntry[] = [
-    { time: '09:00 - 10:00', monday: 'DSA', tuesday: 'OS', wednesday: 'DBMS', thursday: 'Algo', friday: 'Maths' },
-    { time: '10:00 - 11:00', monday: 'OS', tuesday: 'DBMS', wednesday: 'Algo', thursday: 'Maths', friday: 'DSA' },
-    { time: '11:00 - 12:00', monday: 'DBMS', tuesday: 'Algo', wednesday: 'Maths', thursday: 'DSA', friday: 'OS' },
-    { time: '12:00 - 01:00', monday: 'Break', tuesday: 'Break', wednesday: 'Break', thursday: 'Break', friday: 'Break' },
-    { time: '01:00 - 02:00', monday: 'Lab', tuesday: 'Lab', wednesday: 'Lab', thursday: 'Lab', friday: 'Lab' },
+    { id: 'evt1', title: 'Mid-Term Exams Start', date: '2023-10-25', color: 'bg-red-500' },
+    { id: 'evt2', title: 'Project Submission Deadline', date: '2023-11-15', color: 'bg-blue-500' },
+    { id: 'evt3', title: 'Tech Fest "Innovate 2023"', date: '2023-11-20', color: 'bg-green-500' },
 ];
 
 export const MOCK_COURSES: Course[] = [
-    { id: 'cs101', name: 'Data Structures', code: 'CS101', credits: 4, faculty: 'Dr. Evelyn Reed' },
-    { id: 'cs102', name: 'Algorithms', code: 'CS102', credits: 4, faculty: 'Prof. Samuel Green' },
-    { id: 'cs103', name: 'Database Systems', code: 'CS103', credits: 3, faculty: 'Dr. Evelyn Reed' },
+    { id: 'cs101', name: 'Data Structures', code: '18CS32', credits: 4, faculty: 'Dr. Robert Smith' },
+    { id: 'cs102', name: 'Algorithms', code: '18CS33', credits: 4, faculty: 'Dr. Robert Smith' },
+    { id: 'cs103', name: 'Database Systems', code: '18CS34', credits: 3, faculty: 'Prof. Emily White' },
 ];
 
 export const MOCK_ASSIGNMENTS: Assignment[] = [
-    { id: 'asg1', title: 'Binary Search Tree Implementation', courseId: 'cs101', courseName: 'Data Structures', instructions: 'Implement a fully functional BST with insert, delete, and search operations.', dueDate: '2024-09-15', totalPoints: 100 },
-    { id: 'asg2', title: 'Sorting Algorithms Comparison', courseId: 'cs102', courseName: 'Algorithms', instructions: 'Analyze and compare the performance of 5 different sorting algorithms.', dueDate: '2024-09-20', totalPoints: 100 },
+    { id: 'asg1', title: 'Linked List Implementation', courseId: 'cs101', courseName: 'Data Structures', instructions: 'Implement a doubly linked list with insert, delete, and search operations.', dueDate: '2023-11-10', totalPoints: 100 },
+    { id: 'asg2', title: 'Binary Search Tree', courseId: 'cs102', courseName: 'Algorithms', instructions: 'Implement a BST and its traversal methods.', dueDate: '2023-11-18', totalPoints: 100 },
 ];
 
 export const MOCK_SUBMISSIONS: Submission[] = [
-    { id: 'sub1', assignmentId: 'asg1', studentUsn: '1BI19CS001', studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=alex', submissionDate: '2024-09-14', status: 'Submitted', grade: 92 },
-    { id: 'sub2', assignmentId: 'asg1', studentUsn: '1BI19CS002', studentName: 'Maria Garcia', studentAvatar: 'https://i.pravatar.cc/150?u=maria', submissionDate: '2024-09-16', status: 'Late', grade: 85 },
-    { id: 'sub3', assignmentId: 'asg2', studentUsn: '1BI19CS001', studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=alex', submissionDate: '2024-09-19', status: 'Submitted', grade: null },
+    { id: 'sub1', assignmentId: 'asg1', studentName: 'Alice Johnson', studentUsn: '1BI19CS001', studentAvatar: 'https://i.pravatar.cc/150?u=alice', submissionDate: '2023-11-09', status: 'Submitted', grade: 90 },
+    { id: 'sub2', assignmentId: 'asg1', studentName: 'Bob Brown', studentUsn: '1BI19CS002', studentAvatar: 'https://i.pravatar.cc/150?u=bob', submissionDate: '2023-11-11', status: 'Late', grade: 75 },
+    { id: 'sub3', assignmentId: 'asg2', studentName: 'Alice Johnson', studentUsn: '1BI19CS001', studentAvatar: 'https://i.pravatar.cc/150?u=alice', submissionDate: '2023-11-17', status: 'Submitted', grade: null },
 ];
 
-
-export const MOCK_CHAT_MESSAGES: ChatMessage[] = [
-    { id: 1, senderId: '1BI19CS001', receiverId: 'TCS01', text: 'Hello Dr. Reed, I had a question about the last lecture.', timestamp: '10:30 AM', senderName: 'Alex Johnson', senderAvatar: 'https://i.pravatar.cc/150?u=alex' },
-    { id: 2, senderId: 'TCS01', receiverId: '1BI19CS001', text: 'Hi Alex, of course. What would you like to know?', timestamp: '10:31 AM', senderName: 'Dr. Evelyn Reed', senderAvatar: 'https://i.pravatar.cc/150?u=evelyn' },
-    { id: 3, senderId: '1BI19CS001', receiverId: 'TCS01', text: 'Regarding the complexity of binary search trees, can you clarify the worst-case scenario?', timestamp: '10:32 AM', senderName: 'Alex Johnson', senderAvatar: 'https://i.pravatar.cc/150?u=alex' },
-    { id: 4, senderId: '1BI19CS002', receiverId: 'TCS02', text: 'Good morning, Professor Green.', timestamp: '11:00 AM', senderName: 'Maria Garcia', senderAvatar: 'https://i.pravatar.cc/150?u=maria' },
+export const MOCK_NOTIFICATIONS: Notification[] = [
+    { id: 1, message: 'New assignment "Linked List Implementation" has been posted for Data Structures.', time: '2 hours ago', read: false },
+    { id: 2, message: 'Your fee payment for this semester is due.', time: '1 day ago', read: false },
+    { id: 3, message: 'Results for Internal Test 1 have been published.', time: '3 days ago', read: true },
 ];
 
 export const feedbackQuestions = [
-    "The teacher explains concepts clearly.",
-    "The teacher is well-prepared for classes.",
-    "The teacher is engaging and encourages participation.",
-    "The teacher is approachable and helpful.",
-    "The course materials provided are useful.",
-    "The assessments are fair and relevant to the course content.",
-    "The teacher provides timely and constructive feedback.",
-    "The teacher manages class time effectively.",
-    "The teacher shows enthusiasm for the subject.",
-    "Overall, I am satisfied with the quality of teaching."
+    'Clarity of explanation',
+    'Pace of teaching',
+    'Engagement with students',
+    'Availability for doubts',
 ];
 
 export const MOCK_TEACHER_FEEDBACK: TeacherFeedback[] = [
     {
         id: 'fb1',
-        teacherName: 'Dr. Evelyn Reed',
+        teacherName: 'Dr. Robert Smith',
         studentUsn: '1BI19CS001',
+        date: '2023-09-15',
         ratings: [
-            { question: feedbackQuestions[0], rating: 5 },
-            { question: feedbackQuestions[1], rating: 5 },
-            { question: feedbackQuestions[2], rating: 4 },
+            { question: 'Clarity of explanation', rating: 5 },
+            { question: 'Pace of teaching', rating: 4 },
+            { question: 'Engagement with students', rating: 5 },
+            { question: 'Availability for doubts', rating: 4 },
         ],
-        comments: 'Dr. Reed is fantastic! Her examples are very clear and she is always willing to help after class. The data structures course is challenging but she makes it manageable.',
-        date: '2024-07-20'
+        comments: 'Excellent teaching style, very clear concepts. The real-world examples are very helpful.'
     },
-    {
+     {
         id: 'fb2',
-        teacherName: 'Dr. Evelyn Reed',
+        teacherName: 'Prof. Emily White',
         studentUsn: '1BI19CS002',
+        date: '2023-09-16',
         ratings: [
-             { question: feedbackQuestions[0], rating: 4 },
-             { question: feedbackQuestions[1], rating: 5 },
+            { question: 'Clarity of explanation', rating: 4 },
+            { question: 'Pace of teaching', rating: 3 },
+            { question: 'Engagement with students', rating: 4 },
+            { question: 'Availability for doubts', rating: 5 },
         ],
-        comments: 'Very knowledgeable, but sometimes moves a bit too fast through the material.',
-        date: '2024-07-21'
-    },
-    {
-        id: 'fb3',
-        teacherName: 'Prof. Samuel Green',
-        studentUsn: '1BI19CS001',
-        ratings: [
-             { question: feedbackQuestions[0], rating: 4 },
-        ],
-        comments: 'Good professor, very passionate about algorithms.',
-        date: '2024-07-22'
+        comments: 'The professor is very approachable and clears doubts patiently. The pace could be a little slower sometimes.'
     }
-];
+]

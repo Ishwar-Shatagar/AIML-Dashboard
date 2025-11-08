@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { UserRole } from '../types';
 
+const bldeaLogo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAfASURBVHhe7Z1/aFRlGMe/s5tQpCF2JUSwCxVBwbQUS62I4B/bELU/YlsxxRIrU21xK1gKWzFBIVZpkyIpsVRsCFZp1dYqK7VgFbLRIrYQUVZBwd2f3Hve3b33vLvvvZv3+8DAu+fevffNfN/7Pffcew+RkZGRkZGRkZGRkZGRkZGRkZFhL1V62+z/wL0L9d4d5FvWd/yF/yK9/1h7P+H9D6f6WwY5NfT5/8n7b/S3D/Jr13sX6i0Hyr2P5FvXv/D/j4/y713s/8T7n8e0ZxmR0ttr5/pP7X0P5v+a/r/t/83rO/X+0/b+q/k9tff88/yedv8kPz/s37vY/5P13g/8v2r1b9f7t+b7d8b7N/m9S/m+pftb+T3C999e97e2+2fH+zfk+/fM97/3/L+D1V7n/r9V/N7f9P9g/z+y/tP9fe19v7G+9/V7x8a7f+Z9/9Ivb/w/u/o91+v96+U73+Q718b7d9V75+V7/+A/y+1/2T9/1F/32L//0N+P+z/R/r+e/r+t/n+g/x+S//+r/n+7+z9jfr+5/a+R//+S//+y3x/1qBHPX0EwJgR3z0g33/p71ft/8X7v93rL/X3D/L7a+v9j/r7p/z+mv7+Y34/of//zN9P7b/X3v+43l+V75+y9z/k+yfs/cft/Yz+vmX//zF/P7f/L/X+7e19qN4/Ue8/p+9v2vtQvf+sfn+t3n+C/j+s37/J73+c7/+Yv/+h3r+u3r9V7/8p938a9b5FvZ+g37+r37+G/n8N/P4M/PwU/f/g3t+E8B8JYKQI3yMg+p4BfF8H+F4B8b0B8b0D8L0E8L0C4vscxPftgO93AN9vAr5vI3zfTvh+K/D9JuD7DsD3W4DvdwG/b/d8f0A4vgMwfAfh+DbC8e2C43sCx3cEjh8LHJ8bOH4scXwe4Ph8wPF5g+PzFsfnDY7PZxifzzI+n2N8Psf4fI7x+Zzk+ZzG+ZzM+ZxM+ZzC+ZxS+Zwy+Zwi+ZyC+ZyK+ZyS+ZyM+ZyO+Zyc+Zyc+Zx8+Zx0+Zx6+ZzK+ZxC+ZzG+ZzC+ZzK+ZxS+ZxS+Zzi+Zzi+Zzy+Zzy+ZzM+ZzO+ZzM+ZzM+ZzM+ZzM+ZzM+ZzK+Zyi+ZxS+Zy8+Zx8+Zx8+Zxy+Zxy+Zx8+Zx8+Zz0+ZzC+ZzC+ZzK+ZxM+ZzM+ZzC+ZxS+Zxi+ZyS+ZyS+Zzy+ZxC+ZzG+ZzG+ZzM+ZzO+ZzK+ZxS+ZzK+ZyS+ZxS+Zx8+Zx8+ZyS+ZzG+ZzM+ZzM+ZzK+ZzK+ZzM+ZzG+ZzG+ZzG+ZzK+ZzK+ZzK+ZzK+ZzK+ZzK+ZzG+ZzK+ZzK+ZzK+ZzK+ZzG+ZzG+ZzG+ZzK+ZzM+ZzM+ZzM+ZzO+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+ZzM+AIA/4e4f+gAAAABJRU5ErkJggg==";
+
 const Login: React.FC = () => {
     const [role, setRole] = useState<UserRole>(UserRole.STUDENT);
     const [id, setId] = useState('');
@@ -24,11 +26,14 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
-            <div className="max-w-md w-full bg-white shadow-md rounded-lg p-8">
+        <div className="min-h-screen bg-light flex flex-col justify-center items-center p-4">
+            <div className="max-w-md w-full bg-white shadow-xl rounded-2xl p-8">
                 <div className="text-center mb-8">
-                    <h1 className="text-2xl font-bold text-primary">LMS Portal Login</h1>
-                    <p className="text-gray-500">Welcome! Please sign in.</p>
+                    <img src={bldeaLogo} alt="BLDEACET Logo" className="w-24 h-24 mx-auto mb-6" />
+                    <h1 className="text-xl font-bold text-dark leading-tight">
+                        BLDEA’s V.P. Dr. P.G. Halakatti College of Engineering & Technology, Vijayapura
+                    </h1>
+                    <p className="text-gray-500 mt-2">Welcome to the Ed-Portal</p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">

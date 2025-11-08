@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppUser, UserRole, StudentProfile, FacultyProfile } from '../types';
+import { AppUser, FacultyProfile, StudentProfile, UserRole } from '../types';
 import { MOCK_STUDENTS, MOCK_FACULTY } from '../constants';
 
 interface AuthContextType {
@@ -17,44 +17,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         try {
-            const storedUser = localStorage.getItem('user');
+            const storedUser = localStorage.getItem('lms-user');
             if (storedUser) {
                 setUser(JSON.parse(storedUser));
             }
         } catch (error) {
-            console.error('Failed to parse user from localStorage', error);
-            localStorage.removeItem('user');
+            console.error("Failed to parse user from localStorage", error);
+            localStorage.removeItem('lms-user');
         } finally {
             setLoading(false);
         }
     }, []);
 
     const login = (role: UserRole, id: string, password?: string): boolean => {
-        setLoading(true);
-        let foundUser: AppUser | null = null;
+        let foundUser: StudentProfile | (FacultyProfile & { password?: string }) | undefined;
 
         if (role === UserRole.STUDENT) {
-            foundUser = MOCK_STUDENTS.find(student => student.usn.toLowerCase() === id.toLowerCase()) || null;
+            foundUser = MOCK_STUDENTS.find(student => student.usn.toLowerCase() === id.toLowerCase());
         } else if (role === UserRole.FACULTY) {
-            foundUser = MOCK_FACULTY.find(faculty => faculty.teacherId === id && faculty.password === password) || null;
+            foundUser = MOCK_FACULTY.find(faculty => faculty.teacherId.toLowerCase() === id.toLowerCase() && faculty.password === password);
         }
 
         if (foundUser) {
-            localStorage.setItem('user', JSON.stringify(foundUser));
             setUser(foundUser);
-            setLoading(false);
+            localStorage.setItem('lms-user', JSON.stringify(foundUser));
             return true;
         }
 
-        setLoading(false);
         return false;
     };
 
     const logout = () => {
-        localStorage.removeItem('user');
         setUser(null);
+        localStorage.removeItem('lms-user');
+        // Optionally navigate to login page
+        window.location.href = '/login';
     };
-
 
     return (
         <AuthContext.Provider value={{ user, loading, login, logout }}>
