@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, []);
 
     const login = (role: UserRole, id: string, password?: string): boolean => {
-        let foundUser: StudentProfile | (FacultyProfile & { password?: string }) | undefined;
+        let foundUser: StudentProfile | FacultyProfile | undefined;
 
         if (role === UserRole.STUDENT) {
             foundUser = MOCK_STUDENTS.find(student => student.usn.toLowerCase() === id.toLowerCase());
@@ -39,8 +39,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
 
         if (foundUser) {
-            setUser(foundUser);
-            localStorage.setItem('lms-user', JSON.stringify(foundUser));
+            // Ensure we create a fresh object without the password for security/consistency
+            const userToStore = { ...foundUser };
+            if ('password' in userToStore) {
+                delete userToStore.password;
+            }
+
+            setUser(userToStore);
+            localStorage.setItem('lms-user', JSON.stringify(userToStore));
             return true;
         }
 

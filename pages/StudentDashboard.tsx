@@ -13,6 +13,11 @@ const StudentDashboard: React.FC = () => {
         return <div>Loading student data...</div>;
     }
 
+    // Default values for data that might not be in the new dataset
+    const cgpa = student.cgpa ?? 0.0;
+    const attendance = student.attendance ?? 0;
+    const cgpaData = student.cgpaData ?? [];
+
     return (
         <div className="space-y-8">
             <div>
@@ -22,12 +27,12 @@ const StudentDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card title="Overall CGPA">
                     <div className="text-center">
-                        <p className="text-5xl font-extrabold text-primary">{student.cgpa?.toFixed(2)}</p>
-                        <p className="text-sm text-gray-500">Out of 10.0</p>
+                        <p className="text-5xl font-extrabold text-primary">{cgpa.toFixed(2)}</p>
+                        <p className="text-sm text-gray-500">Out of 10.0 (if available)</p>
                     </div>
                 </Card>
                 <Card title="Attendance">
-                     <ScoreDonutChart score={student.attendance} />
+                     <ScoreDonutChart score={attendance} />
                 </Card>
                 <Card title="Courses Enrolled">
                     <div className="text-center">
@@ -38,7 +43,11 @@ const StudentDashboard: React.FC = () => {
             </div>
             
             <Card title="CGPA Trend">
-                <CgpaChart data={student.cgpaData} />
+                {cgpaData.length > 0 ? (
+                    <CgpaChart data={cgpaData} />
+                ) : (
+                    <p className="text-center text-gray-500">No CGPA history available.</p>
+                )}
             </Card>
 
             <Card title="Recent Announcements">

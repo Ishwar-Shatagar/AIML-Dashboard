@@ -111,6 +111,17 @@ const Login: React.FC = () => {
                         </button>
                     </div>
                 </form>
+
+                <div className="mt-6 p-4 bg-light rounded-lg border border-gray-200 text-sm">
+                    <h3 className="font-bold text-center mb-2 text-dark">Demo Credentials</h3>
+                    <div className="text-gray-600">
+                        <p className="font-semibold">Student:</p>
+                        <p className="ml-2"><strong>USN:</strong> 1BI19CS001</p>
+                        <p className="font-semibold mt-2">Faculty:</p>
+                        <p className="ml-2"><strong>ID:</strong> TCS01</p>
+                        <p className="ml-2"><strong>Password:</strong> password123</p>
+                    </div>
+                </div>
             </div>
         </div>
     );

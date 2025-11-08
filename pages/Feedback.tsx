@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Card from '../components/ui/Card';
-import { MOCK_COURSES, feedbackQuestions } from '../constants';
+import { useAuth } from '../hooks/useAuth';
+import { MOCK_FACULTY, MOCK_TIMETABLE, feedbackQuestions } from '../constants';
+import { StudentProfile, UserRole } from '../types';
 
 const StarRatingInput: React.FC<{ question: string, rating: number, onRate: (rating: number) => void }> = ({ question, rating, onRate }) => {
     const [hover, setHover] = useState(0);
@@ -37,7 +39,28 @@ const StarRatingInput: React.FC<{ question: string, rating: number, onRate: (rat
 };
 
 const Feedback: React.FC = () => {
-    const [selectedCourse, setSelectedCourse] = useState(MOCK_COURSES[0].id);
+    const { user } = useAuth();
+    const student = user as StudentProfile;
+
+    const teachersForSemester = useMemo(() => {
+        if (!student || student.role !== UserRole.STUDENT) return [];
+        
+        const semesterTimetable = MOCK_TIMETABLE[student.semester];
+        if (!semesterTimetable) return [];
+        
+        const teacherNames = new Set<string>();
+        Object.values(semesterTimetable).forEach(daySchedule => {
+            daySchedule.forEach(entry => {
+                if (entry.teacher !== 'TBD') {
+                    teacherNames.add(entry.teacher);
+                }
+            });
+        });
+        
+        return MOCK_FACULTY.filter(faculty => teacherNames.has(faculty.name));
+    }, [student]);
+
+    const [selectedTeacher, setSelectedTeacher] = useState(teachersForSemester[0]?.name || '');
     const [ratings, setRatings] = useState<Record<string, number>>({});
     const [comments, setComments] = useState('');
 
@@ -53,7 +76,7 @@ const Feedback: React.FC = () => {
             return;
         }
         console.log({
-            courseId: selectedCourse,
+            teacherName: selectedTeacher,
             ratings,
             comments,
         });
@@ -63,6 +86,10 @@ const Feedback: React.FC = () => {
         setComments('');
     };
 
+    if (!student || student.role !== UserRole.STUDENT) {
+        return <p>This page is for students only.</p>;
+    }
+
     return (
         <div className="space-y-6">
             <h1 className="text-3xl font-bold text-dark">Submit Feedback</h1>
@@ -71,15 +98,15 @@ const Feedback: React.FC = () => {
             <Card>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="course" className="block text-sm font-medium text-gray-700 mb-1">Select Course</label>
+                        <label htmlFor="teacher" className="block text-sm font-medium text-gray-700 mb-1">Select Teacher</label>
                         <select
-                            id="course"
-                            value={selectedCourse}
-                            onChange={(e) => setSelectedCourse(e.target.value)}
+                            id="teacher"
+                            value={selectedTeacher}
+                            onChange={(e) => setSelectedTeacher(e.target.value)}
                             className="mt-1 block w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                         >
-                            {MOCK_COURSES.map(course => (
-                                <option key={course.id} value={course.id}>{course.name} - {course.faculty}</option>
+                            {teachersForSemester.map(teacher => (
+                                <option key={teacher.id} value={teacher.name}>{teacher.name}</option>
                             ))}
                         </select>
                     </div>

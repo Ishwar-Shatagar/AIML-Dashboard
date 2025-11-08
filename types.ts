@@ -17,16 +17,25 @@ export interface StudentProfile extends AppUser {
     usn: string;
     course: string;
     batch: string;
-    cgpaData: CgpaData[];
-    attendance: number;
-    assessments: InternalAssessment[];
+    semester: string;
+    // Optional data that may not exist for all students from the new dataset
+    cgpaData?: CgpaData[];
+    attendance?: number;
+    assessments?: InternalAssessment[];
     cgpa?: number;
+}
+
+export interface Subject {
+    code: string;
+    name: string;
+    semester: string;
 }
 
 export interface FacultyProfile extends AppUser {
     role: UserRole.FACULTY;
     teacherId: string;
-    department: string;
+    password?: string;
+    subjects: Subject[];
 }
 
 export interface UpcomingEvent {
@@ -92,4 +101,19 @@ export interface TeacherFeedback {
   date: string;
   ratings: { question: string; rating: number }[];
   comments: string;
+}
+
+export interface TimetableEntry {
+    time: string;
+    subject: string;
+    short: string;
+    teacher: string;
+}
+
+export interface DailySchedule {
+    [day: string]: TimetableEntry[];
+}
+
+export interface TimetableData {
+    [semester: string]: DailySchedule;
 }

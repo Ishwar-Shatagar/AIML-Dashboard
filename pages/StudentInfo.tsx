@@ -6,7 +6,7 @@ import { StudentProfile } from '../types';
 const InfoRow: React.FC<{ label: string; value: string | number | undefined }> = ({ label, value }) => (
     <div className="flex flex-col sm:flex-row sm:justify-between py-3 border-b border-gray-200 last:border-0">
         <span className="font-medium text-gray-500">{label}</span>
-        <span className="font-semibold text-dark text-left sm:text-right">{value}</span>
+        <span className="font-semibold text-dark text-left sm:text-right">{value || 'N/A'}</span>
     </div>
 );
 
@@ -28,6 +28,7 @@ const StudentInfo: React.FC = () => {
                         <div className="mt-6">
                             <InfoRow label="Course" value={student.course} />
                             <InfoRow label="Batch" value={student.batch} />
+                            <InfoRow label="Current Semester" value={student.semester} />
                             <InfoRow label="Email" value={`${student.usn.toLowerCase()}@bldeacet.ac.in`} />
                             <InfoRow label="Current CGPA" value={student.cgpa?.toFixed(2)} />
                         </div>
@@ -36,11 +37,11 @@ const StudentInfo: React.FC = () => {
             </Card>
              <Card title="Personal Information">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
-                     <InfoRow label="Date of Birth" value="January 15, 2001" />
-                     <InfoRow label="Contact Number" value="+91 98765 43210" />
-                     <InfoRow label="Father's Name" value="Richard Johnson" />
-                     <InfoRow label="Mother's Name" value="Mary Johnson" />
-                     <InfoRow label="Address" value="123, Learning Lane, Education City, 560001" />
+                     <InfoRow label="Date of Birth" value="Not Available" />
+                     <InfoRow label="Contact Number" value="Not Available" />
+                     <InfoRow label="Father's Name" value="Not Available" />
+                     <InfoRow label="Mother's Name" value="Not Available" />
+                     <InfoRow label="Address" value="Not Available" />
                 </div>
             </Card>
         </div>
